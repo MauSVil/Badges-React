@@ -6,6 +6,9 @@ import {Link} from 'react-router-dom'
 import api from '../api'
 import PageLoading from '../components/PageLoading.js'
 import PageError from '../components/PageError.js'
+import MiniLoader from '../components/MiniLoader'
+
+
 
 class Badges extends React.Component{
     state={
@@ -14,16 +17,13 @@ class Badges extends React.Component{
         data: undefined
     }
 
-    // constructor(props){
-    //     super(props)
-    //     console.log('1.constructor()');
-    //     this.state = {
-    //         data:[] 
-    //     }
-    // }
-
     componentDidMount(){
         this.fetchData()
+        this.intervalId=setInterval(this.fetchData,5000)
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.intervalId)
     }
 
     fetchData= async ()=>{
@@ -36,25 +36,8 @@ class Badges extends React.Component{
         }
     }
 
-    // componentDidUpdate(prevProps, prevState){
-    //     console.log('5. componentDidUpdate()');
-    //     console.log({
-    //         prevProps: prevProps,
-    //         prevState: prevState
-    //     });
-    //     console.log({
-    //         props:this.props,
-    //         state:this.state,
-    //     });
-    // }
-
-    // componentWillUnmount(){
-    //     console.log('6. componentWillUnmount');
-    //     clearTimeout(this.timeoutId)
-    // }
-
     render(){
-        if(this.state.loading===true){
+        if(this.state.loading===true && !this.state.data){
             return <PageLoading/>
         }
 
@@ -86,6 +69,7 @@ class Badges extends React.Component{
                             <BadgesList
                                 badges={this.state.data}
                             />
+                            {this.state.loading && <MiniLoader/>}
                         </div>
                     </div>
                 </div>

@@ -59,7 +59,7 @@ class BadgeEdit extends React.Component{
         })
 
         try{
-            await api.badges.create(this.state.form)
+            await api.badges.update(this.props.match.params.badgeId,this.state.form)
             this.setState({
                 loading:false
             })
